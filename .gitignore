@@ -1,0 +1,75 @@
+# ====================================================================
+# .gitignore Officiel - Projet Datacenter DataLab Research (M1 AR)
+# Garantie un dépôt 100% orienté Code & Texte (Zéro image / Zéro binaire)
+# ====================================================================
+
+# --------------------------------------------------------------------
+# 1. Virtualisation & Simulateurs (Fichiers lourds GNS3 / VirtualBox)
+# --------------------------------------------------------------------
+*.vmdk
+*.vdi
+*.qcow2
+*.iso
+*.ova
+*.ovf
+*.log
+*.gns3.bak
+.gns3/
+# Si un membre utilise Packet Tracer par erreur
+*.pkt
+
+# --------------------------------------------------------------------
+# 2. Sécurité Anti-Images & Fichiers Binaires Lourds
+# --------------------------------------------------------------------
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.bmp
+*.ico
+*.pdf
+
+# --------------------------------------------------------------------
+# 3. Documentation Bureautique (À déporter sur le Google Drive)
+# --------------------------------------------------------------------
+*.xlsx
+*.xls
+*.docx
+*.doc
+*.pptx
+*.ppt
+*.csv
+
+# --------------------------------------------------------------------
+# 4. Compilateurs & Fichiers Temporaires LaTeX
+# --------------------------------------------------------------------
+# Fichiers auxiliaires générés par la compilation du Rapport et du Beamer
+*.aux
+*.log
+*.toc
+*.synctex.gz
+*.out
+*.nav
+*.snm
+*.vrb
+*.fls
+*.fdb_latexmk
+*.blg
+*.bbl
+
+# --------------------------------------------------------------------
+# 5. Exception Spécifique pour la Rédaction LaTeX en Local
+# --------------------------------------------------------------------
+# Permet à l'équipe de créer un dossier d'images localement sur leur PC
+# pour compiler le PDF final sans jamais envoyer ces images sur GitHub.
+figures/rapport/
+figures/beamer/
+
+# --------------------------------------------------------------------
+# 6. Systèmes d'exploitation & IDE (Fichiers cachés inutiles)
+# --------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
