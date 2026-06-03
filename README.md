@@ -27,7 +27,7 @@ datalab-infra-m1/
 ├── scripts_config/         # Tous nos scripts de configuration système
 │   ├── network/            # Config BIND9, isc-dhcp-server, nftables
 │   ├── storage/            # Scripts d'automatisation RAID 10 et LVM
-│   ├── cloud-apps/         # Configuration Nginx, Nextcloud, vsftpd
+│   ├── cloud_apps/         # Configuration Nginx, Nextcloud, vsftpd
 │   └── supervision/        # Scripts Prometheus / configurations des agents
 ├── src_bot/                # Code source de notre bot (telegram)
 └── documentation/          # nos fichiers sources pour le rapport et la soutenance
