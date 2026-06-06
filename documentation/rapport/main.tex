@@ -1,0 +1,40 @@
+\documentclass[12pt,a4paper]{report}
+
+%----------------------------
+% PRÉAMBULE (séparé en fichiers)
+%----------------------------
+
+
+\input{preamble/packages}
+\usepackage{bookmark}
+\input{preamble/commands}
+\input{preamble/style}
+
+%----------------------------
+% DOCUMENT
+%----------------------------
+\begin{document}
+\input{en-tete}
+
+% Table des matières en premier
+\tableofcontents
+\listoffigures 
+\listoftables 
+\clearpage
+
+%----------------------------
+% CHAPITRES
+%----------------------------
+\input{chapitres/00.introduction.tex}
+\input{chapitres/01.conception.tex}
+\input{chapitres/02.simulation.tex}
+\input{chapitres/03.deploiement.tex}
+\input{chapitres/04.supervision.tex}
+\input{chapitres/05.perspectives.tex}
+
+
+
+\clearpage
+\bibliographystyle{ieeetr}
+\bibliography{bibliography/references}
+\end{document}
