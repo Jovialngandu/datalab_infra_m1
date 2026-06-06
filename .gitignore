@@ -57,6 +57,9 @@
 *.fdb_latexmk
 *.blg
 *.bbl
+*.pdf
+*.lof
+*.lot
 
 # --------------------------------------------------------------------
 # 5. Exception Spécifique pour la Rédaction LaTeX en Local
@@ -73,3 +76,7 @@ figures/beamer/
 Thumbs.db
 .vscode/
 .idea/
+
+
+export_project.sh
+project_dump.txt
