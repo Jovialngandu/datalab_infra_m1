@@ -1,0 +1,48 @@
+\chapter{Déploiement Opérationnel des Services}
+\label{chap:deploiement_services}
+
+Ce chapitre expose les procédures d'installation, l'architecture logicielle et les choix de configuration retenus pour l'ensemble des services de production de l'institut \textit{DataLab Research}.
+
+\section{Services Communs d'Infrastructure : DHCP et DNS}
+
+\subsection{Configuration de l'Allocation Dynamique (isc-dhcp-server)}
+L'attribution automatisée des configurations réseau pour les machines des chercheurs (VLAN 30) et des administrateurs (VLAN 40) est déléguée au service \textbf{isc-dhcp-server}. Installé sur le serveur d'infrastructure principal du VLAN 20, il écoute les requêtes de diffusion (\textit{DHCP Discover}) relayées par le routeur via l'agent \textit{DHCP Relay}.
+
+Le fichier de configuration principal \texttt{/etc/dhcp/dhcpd.conf} définit des baux stricts, associant à chaque sous-réseau sa plage d'adresses utiles, son masque, sa passerelle par défaut et l'adresse IP de notre serveur DNS interne (\texttt{10.0.20.10}). Les adresses des équipements d'administration critiques ou des serveurs sont quant à elles exclues des plages dynamiques pour garantir leur fixité.
+
+\subsection{Résolution de Noms de Domaine avec BIND9}
+La résolution de noms est confiée à \textbf{BIND9}. Afin de permettre aux utilisateurs de l'institut d'accéder aux ressources externes tout en résolvant les serveurs locaux, BIND9 est configuré avec des redirecteurs de zone (\textit{forwarders}) pointant vers les serveurs DNS publics stables. Le fichier de configuration des options (\texttt{named.conf.options}) intègre des directives de sécurité pour restreindre les requêtes récursives aux seuls sous-réseaux internes autorisés de la plage \texttt{10.0.0.0/16}.
+
+\section{Mise en Œuvre de la Plateforme de Transfert de Fichiers (FTPS)}
+Pour le partage et la centralisation des données des 80 chercheurs, le service \textbf{vsftpd} (\textit{Very Secure FTP Daemon}) a été déployé sur le serveur du VLAN 20.
+
+% \subsection{Durcissement par Chiffrement SSL/TLS}
+% Conformément aux exigences de sécurité du niveau Master, le FTP traditionnel en texte clair a été proscrit. Une couche de chiffrement \textbf{SSL/TLS} a été implémentée en générant un certificat RSA auto-signé de 2048 bits. Le fichier \texttt{/etc/vsftpd.conf} force l'utilisation exclusive du protocole sécurisé FTPS via les directives suivantes :
+% \begin{verbatim}
+% ssl_enable=YES
+% allow_anon_ssl=NO
+% force_local_data_ssl=YES
+% force_local_logins_ssl=YES
+% ssl_tlsv1_2=YES
+% ssl_tlsv1_3=YES
+% \end{verbatim}
+
+\subsection{Cloisonnement des Utilisateurs (Chroot)}
+Pour empêcher qu'un utilisateur ou un partenaire externe ne puisse remonter dans l'arborescence du système d'exploitation du serveur, le mécanisme de cloisonnement \textbf{Chroot} a été activé. Chaque chercheur est ainsi confiné à sa connexion dans son sous-répertoire \texttt{/home/\$USER/ftp}, sans aucun accès au shell ou aux fichiers sensibles de l'infrastructure.
+
+\section{Validation Clinique du Transfert de Données}
+La validation du fonctionnement du serveur FTP a été réalisée en conditions réelles depuis une machine cliente . 
+
+Comme le montre la figure \ref{fig:test_transfert_ftp}  la connexion s'établit avec succès. La commande de dépôt de fichier (\texttt{put}) s'exécute sans aucune perte de données, et l'intégrité du transfert est confirmée par le listage (\texttt{ls}) des fichiers sur le répertoire distant.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/test8trqnsfert8ftp.png}
+    \caption{Validation du transfert de fichiers sécurisé via le client lftp}
+    \label{fig:test_transfert_ftp}
+\end{figure}
+
+\section{Mécanisme de Sauvegarde et Pont Inter-Serveur}
+Pour répondre au besoin crucial de haute disponibilité et de redondance des données scientifiques, un mécanisme de sauvegarde automatisé a été configuré entre le serveur principal (VLAN 20) et le serveur dédié au stockage des sauvegardes (\texttt{backup-vlan-60} situé dans le VLAN 60).
+
+Un pont réseau direct  extrait périodiquement les données déposées par les chercheurs sur le serveur de production pour les répliquer vers le volume de stockage du serveur de backup. Cette architecture garantit que même en cas de défaillance critique ou de perte totale du serveur du VLAN 20, l'intégralité des travaux de recherche reste disponible et intacte sur le segment de sauvegarde isolé.
