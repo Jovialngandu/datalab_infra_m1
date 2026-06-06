@@ -1,0 +1,56 @@
+\section{Introduction \& Contexte}
+
+% Slide 3
+\begin{frame}{Introduction et Contexte}
+    \begin{block}{Le Mandat DataLab Research}
+        Concevoir et déployer une infrastructure datacenter sécurisée et hautement disponible pour un institut de recherche de \textbf{80 utilisateurs}.
+    \end{block}
+
+    \vspace{0.3cm}
+    \begin{alertblock}{Défis Majeurs}
+        \begin{itemize}
+            \item Manipulation de volumes massifs de données scientifiques sensibles.
+            \item Besoin d'une étanchéité absolue entre la zone publique (DMZ) et les données de recherche.
+            \item Exigence d'une résilience matérielle ($24/7$) face aux pannes de disques.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% Slide 4
+\begin{frame}{Objectifs et Périmètre Technique}
+    L'implémentation est découpée en 4 piliers majeurs :
+    
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{exampleblock}{1. Réseau \& Sécurité}
+                \begin{itemize}
+                    \item 8 VLANs segmentés
+                    \item Filtrage Stateful (nftables)
+                    \item DMZ étanche avec HAProxy
+                \end{itemize}
+            \end{exampleblock}
+            \begin{exampleblock}{2. Haute Disponibilité}
+                \begin{itemize}
+                    \item Grappe RAID 10 logiciel
+                    \item Volumes élastiques LVM
+                \end{itemize}
+            \end{exampleblock}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \begin{exampleblock}{3. Services Applicatifs}
+                \begin{itemize}
+                    \item Cloud Privé Nextcloud (LNMP)
+                    \item Serveurs SFTP et FTPS durcis
+                    \item Split-DNS (BIND9)
+                \end{itemize}
+            \end{exampleblock}
+            \begin{exampleblock}{4. Observabilité}
+                \begin{itemize}
+                    \item Supervision Zabbix \& SNMP
+                    \item Métriques Prometheus / Grafana
+                \end{itemize}
+            \end{exampleblock}
+        \end{column}
+    \end{columns}
+\end{frame}
