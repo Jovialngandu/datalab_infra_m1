@@ -1,0 +1,113 @@
+\section{Supervision, Proactivité et Conclusions}
+
+%------------------------------------------------------------
+% Slide 16 : Approche de la Supervision et Volumétrie
+%------------------------------------------------------------
+\begin{frame}{Supervision Locale de l'Espace Disque}
+    Pour préserver les ressources des postes, une supervision native et légère a été privilégiée.
+
+    \vspace{0.2cm}
+    \begin{columns}[T]
+        \begin{column}{0.45\textwidth}
+            \textbf{Analyse via \texttt{df -h} :}
+            \begin{itemize}
+                \item Surveillance du serveur de sauvegarde (\texttt{VLAN 60}).
+                \item Utilisation des volumes logiques via LVM.
+                \item \textbf{État actuel :} 4.6 Go utilisés (37\,\%), 8.1 Go disponibles.
+                \item Point de contrôle clé pour éviter la saturation des données scientifiques.
+            \end{itemize}
+        \end{column}
+        
+        \begin{column}{0.55\textwidth}
+            \begin{figure}
+                \centering
+                % Intégration de votre capture file_serveur_size.jpeg
+                \includegraphics[width=0.98\textwidth]{figures/file_serveur_size.jpeg}
+                \caption{Suivi de l'occupation des blocs du système de fichiers}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 17 : Innovation - ChatOps via Telegram Bot
+%------------------------------------------------------------
+% \begin{frame}{Alerte Proactive : Automatisation \& ChatOps}
+%     Pour passer d'une maintenance réactive à un monitoring proactif sans alourdir le système.
+
+%     \vspace{0.3cm}
+%     \begin{block}{Le Script de Supervision Intelligent (Node.js)}
+%         \begin{itemize}
+%             \item Script local léger qui analyse les métriques de stockage en arrière-plan.
+%             \item \textbf{Déclenchement immédiat} dès qu'un changement ou un seuil critique est détecté.
+%             \item Connexion sécurisée via l'API Web et notification instantanée sur le canal \textbf{Telegram} de l'administrateur.
+%         \end{itemize}
+%     \end{block}
+
+%     \begin{exampleblock}{Avantage Ingénieur}
+%         L'administrateur réseau est alerté en temps réel sur son smartphone de la réussite ou de l'anomalie d'une réplication de sauvegarde.
+%     \end{exampleblock}
+% \end{frame}
+
+%------------------------------------------------------------
+% Slide 18 : Retours d'Expérience & Défis Surmontés
+%------------------------------------------------------------
+\begin{frame}{Retours d'Expérience et Défis Surmontés}
+    La réalisation de cette infrastructure a imposé des arbitrages techniques forts face aux réalités logistiques.
+
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item \textbf{Gestion du temps :} Le calendrier global ne nous ayant pas été favorable, l'équipe a dû se mobiliser en mode Sprint Agile pour prioriser les livrables vitaux.
+        \item \textbf{Limitations matérielles :} La charge CPU/RAM générée par l'émulation complète sous GNS3 a ralenti nos postes de travail.
+        \item \textbf{Solution et posture MVP :} Choix d'une architecture rationnelle centrée sur un serveur d'infrastructure robuste et un nœud de sauvegarde étanche.
+    \end{itemize}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 19 : Perspectives d'Évolution
+%------------------------------------------------------------
+\begin{frame}{Perspectives d'Évolution de l'Infrastructure}
+    Pour accompagner la croissance future de l'institut \textit{DataLab Research} :
+
+    \vspace{0.3cm}
+    \begin{columns}[T]
+        \begin{column}{0.31\textwidth}
+            \begin{block}{Ansible}
+                \small
+                Industrialisation via l'**Infrastructure as Code** (Playbooks) pour standardiser les configurations.
+            \end{block}
+        \end{column}
+
+        \begin{column}{0.31\textwidth}
+            \begin{block}{Zabbix}
+                \small
+                Centralisation des métriques sur une interface graphique unifiée avec alertes visuelles.
+            \end{block}
+        \end{column}
+
+        \begin{column}{0.31\textwidth}
+            \begin{block}{Docker}
+                \small
+                Conteneurisation des services pour économiser jusqu'à 80\,\% de RAM sur la maquette.
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 20 : Conclusion & Page Finale
+%------------------------------------------------------------
+\begin{frame}[plain]
+    \centering
+    \vspace{2cm}
+    {\huge \color{blue!70!black} \textbf{Merci pour votre attention !}}
+    
+    \vspace{1cm}
+    {\large Place aux questions du jury.}
+    
+    \vspace{1.5cm}
+    \begin{block}{Code Source et Scripts du Projet}
+        \centering
+        \tiny \url{https://github.com/Jovialngandu/datalab_infra_m1}
+    \end{block}
+\end{frame}
