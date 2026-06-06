@@ -1,0 +1,54 @@
+\documentclass[10pt, aspectratio=169]{beamer} % Format 16:9 moderne
+
+% Importation de la configuration et du style
+\input{preamble.tex}
+
+%------------------------------------------------------------
+% INFORMATIONS DE LA PAGE DE GARDE
+%------------------------------------------------------------
+\title[Datacenter Privé \& Cloud]{Conception et Déploiement d'un Datacenter Privé Virtuel}
+\subtitle{Infrastructure de Services Cloud pour \textit{DataLab Research}}
+
+\author[M1 INFO - Groupe 6]{
+  \begin{tabular}{c c c}
+    % \textbf{Équipe Réseau} & \textbf{Équipe Stockage} & \textbf{Équipe Supervision} \\
+    \hline \rule{0pt}{3ex}
+    BIANGA MUNSEKI Jordan     & KINGUMBA MATALANGA Decorte & NGANDU KASEBA Jovial \\
+    BIYAYI KABUYA Josué       & MAKOKO MOPELEMA Sylvie     & NGILIMA ISAWANGELA Aaron \\
+    ESALE MANDUMBA Rubin      & MUKUNGULU KAMUIMBA Beni    & NYENGELE LUAKABWANGA Israël \\
+    IGILIMA BULAMBO David     & MUTOMBO KABI Sylvano       & THEY-THEY KAMBALE Divin \\
+    KATOLO NSHIMBI Jérémie    & MWANGA SHIMBA Jenny        & TSILULU BAKULU Plamedi
+  \end{tabular}
+}
+
+
+\institute[Unikin / Master AR]{
+    Master 1 — Architecture Réseau \\
+    Université de Kinshasa
+}
+\date[Juin 2026]{Soutenance de Projet Intégrateur — Juin 2026}
+
+\titlegraphic{\vspace{-0.5cm}\textbf{Encadré par :} Prof. Selain \textsc{Kasereka}}
+
+%------------------------------------------------------------
+% DEBUT DU DOCUMENT
+%------------------------------------------------------------
+\begin{document}
+
+% Slide 1 : Page de garde
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+% Slide 2 : Sommaire (Généré automatiquement)
+\begin{frame}{Plan de la Présentation}
+    \tableofcontents[hideallsubsections]
+\end{frame}
+
+% Inclusion des différentes parties
+\input{sections/01.intro.tex}
+\input{sections/02.conception.tex}
+\input{sections/03.deploiement.tex}
+\input{sections/04.supervision_conclusion.tex}
+
+\end{document}
