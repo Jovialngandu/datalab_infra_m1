@@ -1,0 +1,58 @@
+\chapter{Simulation et Validation Réseau sous GNS3}
+\label{chap:simulation_validation}
+
+\section{Environnement de Simulation et Topologie Maquette}
+Afin de valider la viabilité de l'infrastructure réseau de \textit{DataLab Research} avant son déploiement à grande échelle, une maquette de simulation logicielle complète a été réalisée sous l'environnement \textbf{GNS3} (\textit{Graphical Network Simulator-3})~\cite{gns3_doc}. 
+
+La topologie émulée, présentée au chapitre précédent (Figure \ref{fig:archi_globale}), intègre un routeur central Cisco faisant office de passerelle de cœur de réseau et un commutateur principal chargé de la distribution et du marquage des trames selon la norme IEEE 802.1Q. L'interconnexion entre le routeur et le commutateur utilise une configuration de type \textit{Router-on-a-Stick}, où l'interface physique du routeur est subdivisée en sous-interfaces virtuelles encapsulées avec l'identifiant de chaque VLAN.
+
+La figure~\ref{fig:archi_globale} illustre la topologie globale et l'interconnexion de nos serveurs virtuels au sein du simulateur.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/archi_globale.jpeg}
+    \caption{Topologie réseau et architecture logique sous GNS3}
+    \label{fig:archi_globale}
+\end{figure}
+
+\section{Validation de l'Attribution Dynamique IP (DHCP)}
+La première phase de validation technique consiste à tester le bon fonctionnement du service d'allocation dynamique d'adresses IP. Le serveur de production situé dans le VLAN 20 exécute le service \texttt{isc-dhcp-server}.
+
+
+ \begin{figure}[H]%[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/test_attribution_dhcp.png}
+    \caption{Capture d'écran de l'attribution dynamique d'une adresse IP via le protocole DHCP}
+    \label{fig:test_dhcp}
+\end{figure}
+
+Lors du démarrage d'une machine cliente sur le réseau, le trafic de requêtes de diffusion est analysé. La figure \ref{fig:test_dhcp} confirme le succès de l'attribution IP. L'analyse des logs système met en évidence le cycle complet du protocole \textbf{DORA} (\textit{Discover, Offer, Request, Acknowledge}) : le client reçoit dynamiquement son adresse IP, son masque de sous-réseau, ainsi que l'adresse de sa passerelle par défaut.
+
+
+\section{Validation du Routage Inter-VLAN et de l'Isolation}
+Une fois les configurations IP stabilisées sur les nœuds de la maquette, une campagne de tests de connectivité par commandes \texttt{ping} croisées a été menée pour valider le routage inter-VLAN.
+
+Comme l'atteste la capture d'écran du terminal présentée dans la figure \ref{fig:test_intervlan}, les paquets ICMP transitent avec succès à travers le cœur de réseau. Une machine de test parvient à joindre simultanément deux serveurs distincts situés sur des segments réseau totalement différents : le serveur principal du VLAN 20 (\texttt{10.0.20.10}) et le serveur de sauvegarde du VLAN 60 (\texttt{10.0.60.20}). Ce test confirme la parfaite connectivité de l'infrastructure et la validité des tables de routage de la passerelle.
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.9\textwidth]{figures/test_intervlan.png}
+    \caption{Test de connectivité simultané (ping) vers les serveurs des VLAN 20 et 60}
+    \label{fig:test_intervlan}
+\end{figure}
+
+\section{Validation de l'Accès Extérieur et de la Résolution DNS}
+Le serveur DNS \textbf{BIND9} installé sur la machine de production du VLAN 20 a été configuré avec des redirecteurs de zone (\textit{forwarders}) pointant vers les serveurs DNS de l'autorité supérieure. 
+
+Pour valider la chaîne complète de résolution de noms et l'accès au réseau étendu (WAN / Internet), un test d'interrogation vers un domaine public externe a été réalisé. Les résultats démontrent qu'un :
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.9\textwidth]{figures/dns_ping.png}
+    \caption{Test de connectivité simultané (ping) vers les serveurs google.com après résolution DNS}
+    \label{fig:test_dns_ping}
+\end{figure}
+aboutit instantanément sans perte de paquets. Cela prouve deux éléments critiques pour le jury :
+\begin{enumerate}
+    \item Le serveur DNS interne résout et traduit correctement les noms de domaine fully qualified (\textit{FQDN}) en adresses IP publiques.
+    \item Le routeur de la maquette GNS3 assure correctement la translation d'adresses (NAT) et le routage des flux sortants vers Internet.
+\end{enumerate}
