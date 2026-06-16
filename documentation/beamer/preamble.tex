@@ -1,0 +1,31 @@
+% Packages de base
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+% Choix du Thème Beamer (Propre, moderne et épuré)
+\usetheme{Boadilla} 
+\usecolortheme{whale} % Couleurs dominantes bleu foncé / professionnel
+
+% Personnalisation des blocs et des éléments
+\setbeamertemplate{navigation symbols}{} % Supprime les icônes de navigation inutiles
+\setbeamertemplate{page number in head/foot}[totalframenumber] % Compteur de slides X/Y
+
+% Configuration des blocs de code léger si besoin
+\usepackage{listings}
+\lstset{
+    basicstyle=\tiny\ttfamily,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!10}
+}
+
+% Répéter le sommaire au début de chaque section pour guider le jury
+\AtBeginSection[]
+{
+  \begin{frame}{Où en sommes-nous ?}
+    \tableofcontents[currentsection,hideallsubsections]
+  \end{frame}
+}

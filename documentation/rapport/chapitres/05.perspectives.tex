@@ -1,0 +1,33 @@
+\chapter{Retours d'Expérience et Perspectives}
+\label{chap:retours_experience_perspectives}
+
+Ce dernier chapitre dresse le bilan humain et technique de notre mission pour l'institut \textit{DataLab Research}. Il expose les difficultés majeures survenues lors de la phase de réalisation et propose des axes d'évolution technologique à long terme pour l'infrastructure.
+
+\section{Difficultés Rencontrées et Solutions Apportées}
+La mise en œuvre d'une infrastructure réseau et système dans un environnement virtualisé imbriqué a soulevé plusieurs défis académiques et logistiques.
+
+\subsection{Contraintes Temporelles Restrictives}
+La principale difficulté a résidé dans la gestion du calendrier de livraison du projet. La contrainte temporelle globale ne nous a pas été favorable, réduisant drastiquement les phases d'études préliminaires et d'expérimentation. Face à cette accélération du calendrier, l'équipe a dû faire preuve de flexibilité en adoptant une méthodologie agile de type sprint, priorisant le déploiement des services réseaux vitaux et la sécurisation des flux de données pour respecter les échéances impératives de la mission.
+
+\subsection{Limitations Matérielles des Postes de Simulation}
+L'émulation simultanée de plusieurs machines virtuelles complètes (Ubuntu Server) au sein de la topologie \textbf{GNS3} requiert des ressources matérielles significatives en termes de processeur (CPU) et de mémoire vive (RAM). La plupart des ordinateurs portables de l'équipe n'étant pas assez performants pour supporter la charge d'une infrastructure massivement distribuée, des ralentissements critiques ont été constatés. 
+
+Pour contourner ce goulot d'étranglement technique sans dégrader la qualité des services, l'équipe a opéré un choix d'architecture pragmatique : centraliser de manière cohérente les services clés (DHCP, DNS, FTPS) sur un serveur principal de production robuste dans le VLAN 20, tout en maintenant l'étanchéité et l'isolation avec le serveur de sauvegarde du VLAN 60.
+
+\subsection{Complexité de la Gestion Multi-tâches}
+Mener de front la conception d'un plan d'adressage étendu à 6 VLANs, l'écriture et le débogage des scripts d'automatisation système, ainsi que la rédaction de ce rapport technique standardisé a nécessité une charge de travail intense. L'utilisation rigoureuse de nos outils de gestion de projet (Notion et GitHub) s'est avérée indispensable pour segmenter l'effort et paralléliser les tâches au sein de l'équipe.
+
+\section{Conclusion Générale}
+Le projet intègre avec succès les exigences fondamentales du cahier des charges de l'institut \textit{DataLab Research}. Bien que les contraintes logistiques aient imposé une rationalisation de la maquette physique, l'ingénierie logique et la segmentation réseau ont été appliquées à l'état de l'art. L'attribution DHCP est fonctionnelle, le routage inter-VLAN est validé par des pings croisés, et le serveur FTP assure le transport  des données de recherche, appuyé par un suivi local rigoureux de la volumétrie.
+
+\section{Perspectives d'Évolution de l'Infrastructure}
+Pour accompagner l'évolution future de l'institut et pallier les limites actuelles de la maquette, trois axes technologiques sont envisagés.
+
+\subsection{Industrialisation et Configuration as Code avec Ansible}
+À terme, la gestion par scripts Bash individualisés montre ses limites en termes de maintenance. La perspective logique est de migrer le déploiement des fichiers de configuration (comme ceux de \texttt{vsftpd} ou \texttt{named}) vers l'outil d'orchestration \textbf{Ansible} \cite{ansible_doc}. L'utilisation de \textit{Playbooks} permettrait d'industrialiser l'infrastructure sous forme de code (\textit{Infrastructure as Code}), garantissant un déploiement standardisé sur n'importe quel nouveau serveur de l'institut en une seule commande.
+
+\subsection{Déploiement d'une Solution de Supervision Centralisée (Zabbix)}
+Le suivi manuel via la commande \texttt{df -h}, bien qu'efficace au niveau local, doit être automatisé à l'échelle de l'entreprise. L'intégration de la solution open-source \textbf{Zabbix} permettrait de centraliser la collecte des métriques matérielles et de générer des alertes visuelles dynamiques ainsi que des notifications instantanées pour les équipes d'administration réseau.
+
+\subsection{Conteneurisation des Services via Docker}
+Afin de répondre définitivement aux problèmes de performance matérielle des postes, l'une des perspectives clés est la conteneurisation des services DNS, DHCP et FTP à l'aide de **Docker**~\cite{docker_doc}. Les conteneurs, partageant le noyau du système d'exploitation hôte, consomment jusqu'à 80\% de mémoire RAM en moins par rapport à des machines virtuelles complètes, permettant ainsi une scalabilité maximale sur des architectures matérielles restreintes.

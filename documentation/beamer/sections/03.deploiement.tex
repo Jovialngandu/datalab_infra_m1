@@ -1,0 +1,138 @@
+\section{Déploiement Opérationnel et Validation des Services}
+
+%------------------------------------------------------------
+% Slide 11 : Services Réseau Fondamentaux (DHCP & DNS)
+%------------------------------------------------------------
+\begin{frame}{Services Réseau Fondamentaux : DHCP et DNS}
+    Le serveur principal « Tout-en-un » (\texttt{10.0.20.10}) orchestre l'infrastructure logique.
+
+    \vspace{0.2cm}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{isc-dhcp-server}
+                \begin{itemize}
+                    \item Attribution automatique des baux IP aux stations de recherche.
+                    \item Cycle \textbf{DORA} complet émulé et validé.
+                    \item Injection automatique des passerelles et du DNS local.
+                \end{itemize}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \begin{block}{BIND9 (Serveur DNS)}
+                \begin{itemize}
+                    \item Résolution de noms locale pour les serveurs de l'institut.
+                    \item Configuration de redirecteurs (\textit{forwarders}) vers le WAN.
+                    \item Sécurisation des requêtes récursives.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}{Validation du Statut des Services Applicatifs (VLAN 20)}
+    Pour répondre aux besoins des 80 chercheurs, l'infrastructure s'appuie sur trois services clés fonctionnels et sécurisés : le transfert de données (\texttt{vsftpd}), l'attribution dynamique d'IP (\texttt{dhcpd}) et la résolution de noms (\texttt{named}).
+
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=1\textwidth]{../rapport/figures/test2_services.png}
+                \caption{Statut opérationnel des daemons systémd}
+            \end{figure}
+        \end{column}
+        
+        \begin{column}{0.4\textwidth}
+            \textbf{Services Validés (Active/Running):}
+            \begin{itemize}
+                \item \textbf{\texttt{vsftpd.service}} : Serveur FTP actif pour le transfert sécurisé des chercheurs.
+                \item \textbf{\texttt{isc-dhcp-server}} : Traitement des requêtes \texttt{DHCPREQUEST} et envois des \texttt{DHCPACK} pour les clients (ex: PC-Client-21).
+                \item \textbf{\texttt{named.service}} : Serveur DNS BIND opérationnel avec isolation des processus.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+%------------------------------------------------------------
+% Slide 12 : Preuve Technique - Attribution DHCP
+%------------------------------------------------------------
+\begin{frame}{Preuve Technique : Attribution Dynamique DHCP}
+    \begin{columns}[T]
+        \begin{column}{0.4\textwidth}
+            \textbf{Validation du Cycle DORA :}
+            \begin{itemize}
+                \item Démarrage d'un nœud client sur la maquette.
+                \item Capture des logs système mettant en évidence les requêtes et acquittements.
+                \item Attribution réussie des paramètres réseau sans conflit.
+            \end{itemize}
+        \end{column}
+        
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                % Intégration de votre capture test_attribution_dhcp.png
+                \includegraphics[width=0.98\textwidth]{figures/test_attribution_dhcp.png}
+                \caption{Capture d'écran du processus d'attribution DHCP}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 13 : Preuve Technique - Routage & Connectivité
+%------------------------------------------------------------
+\begin{frame}{Preuve Technique : Connectivité et Routage Inter-VLAN}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                % Intégration de votre capture vision_globale.jpeg
+                % \includegraphics[width=0.98\textwidth]{figures/test_.jpeg}
+                \caption{Validation des pings croisés à travers le cœur de réseau}
+            \end{figure}
+        \end{column}
+        
+        \begin{column}{0.4\textwidth}
+            \textbf{Validation du Cœur de Réseau :}
+            \begin{itemize}
+                \item Test de connectivité par commandes \texttt{ping} croisées.
+                \item Transit réussi des paquets ICMP entre des sous-réseaux distincts.
+                \item Accès validé vers le serveur de production (\texttt{VLAN 20}) et le serveur de sauvegarde (\texttt{VLAN 60}).
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 14 : Plateforme de Stockage et Partage (FTPS)
+%------------------------------------------------------------
+
+
+
+%------------------------------------------------------------
+% Slide 15 : Preuve Technique - Transfert Clinique
+%------------------------------------------------------------
+\begin{frame}{Preuve Technique : Validation du Transfert FTP }
+
+    \begin{columns}[T]
+        \begin{column}{0.4\textwidth}
+            \textbf{Simulation en conditions réelles :}
+            \begin{itemize}
+                \item Connexion établie depuis un client distant  \texttt{ftp}.
+                \item Authentification et établissement du canal de données.
+                \item Commande \texttt{put} exécutée avec succès sans aucune perte de paquets.
+            \end{itemize}
+        \end{column}
+        
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                % Intégration de votre capture test8trqnsfert8ftp.png
+                \includegraphics[width=0.95\textwidth]{figures/test8trqnsfert8ftp.png}
+                \caption{Flux de connexion et dépôt de fichier validés}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}

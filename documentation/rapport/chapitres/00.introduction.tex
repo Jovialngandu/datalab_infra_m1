@@ -1,0 +1,54 @@
+\chapter{Introduction et Étude Préalable}
+\label{chap:introduction}
+
+\section{Introduction et Contexte du Projet}
+Dans le cadre de la formation de Master 1 en Architecture Réseau à l'Université de Kinshasa, ce projet intégrateur constitue une mise en situation réelle d'ingénierie système et réseau. L'institut de recherche scientifique \textbf{DataLab Research} nous a mandatés pour concevoir, simuler et déployer l'intégralité de son infrastructure réseau et de son système de gestion de données. 
+
+L'institut est une organisation dont l'activité principale repose sur la manipulation, le traitement et le partage de grands volumes de données scientifiques sensibles. L'organisation est structurellement composée de 80 utilisateurs permanents (répartis entre chercheurs, ingénieurs et personnels administratifs) et collabore avec des partenaires externes. Face à ces volumes de données, l'infrastructure doit impérativement répondre à deux exigences majeures :
+\begin{itemize}
+    \item \textbf{Une haute disponibilité ($24/7$) :} Les projets de recherche ne pouvant souffrir d'aucune interruption de service.
+    \item \textbf{Une traçabilité et une sécurité absolues :} Garanties par une sectorisation des flux et une supervision continue.
+\end{itemize}
+
+\section{Étude de l'Existant et Problématique}
+L'architecture d'origine de l'institut souffre de limitations critiques. L'absence de segmentation réseau expose l'ensemble des données de recherche aux machines des utilisateurs et aux flux externes. De plus, l'absence de redondance matérielle sur la couche de stockage ou de serveurs dédiés aux sauvegardes expose l'organisation à une perte de données irréversible en cas de défaillance. Enfin, la maintenance est purement réactive, faute d'outils de monitoring capables d'anticiper les saturations de ressources.
+
+La problématique centrale de notre mission se résume donc ainsi : \textit{Comment bâtir une infrastructure datacenter virtualisée, hautement disponible et sécurisée, capable d'isoler les flux applicatifs tout en offrant une observabilité totale aux administrateurs ?}
+
+\section{Approche Méthodologique et Contraintes Évolutives}
+Pour répondre au cahier des charges rigoureux de \textit{DataLab Research}, notre équipe a opéré des choix technologiques basés sur la robustesse et l'adoption industrielle. Cependant, la réalisation de ce projet s'est inscrite dans un contexte de contraintes réelles fortes, notamment une restriction temporelle majeure  et des limitations de puissance matérielle sur nos postes de simulation. 
+
+Face à cela, nous avons adopté une démarche d'ingénierie pragmatique : concevoir l'intégralité des architectures cibles à l'état de l'art (8 VLANs, routage complet), tout en concentrant le déploiement applicatif sur un environnement rationalisé et fonctionnel.
+
+\section{Justification des Choix Techniques}
+
+\subsection{Système d'Exploitation : Ubuntu Server}
+Le choix s'est porté sur la distribution \textbf{Ubuntu Server}. Ce système d'exploitation open-source garantit une stabilité à toute épreuve, un cycle de support de sécurité étendu, et une compatibilité native avec l'ensemble des outils réseau modernes~\cite{ubuntu_doc}.
+
+\subsection{Services Réseau Fondamentaux : ISC-DHCP-Server et BIND9}
+L'attribution automatisée des configurations réseau est déléguée au service \textbf{isc-dhcp-server}~\cite{dhcp_doc}. La résolution de noms est quant à elle confiée à \textbf{BIND9}, configuré pour assurer la translation des requêtes internes et l'accès vers le réseau étendu (WAN) via des serveurs DNS pivots~\cite{bind9_doc}.
+
+\subsection{Transfert de Fichiers Sécurisé : vsftpd (FTPS)}
+Pour le partage et la centralisation des données des 80 chercheurs, l'implémentation du protocole \textbf{FTPS} via le démon \textbf{vsftpd} (Very Secure FTP Daemon) s'est imposée~\cite{vsftpd_doc}. Contrairement au FTP traditionnel non chiffré, vsftpd configuré avec une couche SSL/TLS garantit l'étanchéité des identifiants et des flux de données transitant sur le réseau de l'institut.
+
+\subsection{Supervision et Suivi Métrique}
+Afin d'assurer le maintien en condition opérationnelle, le suivi de l'état de santé du stockage et des systèmes de fichiers est réalisé au niveau du système d'exploitation par l'analyse des descripteurs de blocs, permettant de prévenir toute saturation avant qu'elle n'impacte les chercheurs.
+
+\section{Outils de Gestion de Projet et Collaboratifs}
+Afin de mener à bien l'implémentation de cette infrastructure sous de fortes contraintes temporelles, deux outils phares de l'ingénierie logicielle et système ont été adoptés par notre équipe.
+
+\subsection{Suivi des Objectifs et Planification : Notion}
+La phase de conception, la répartition des rôles (Réseau, Systèmes, Stockage) et le suivi des jalons ont été entièrement centralisés sur la plateforme collaborative \textbf{Notion}. L'utilisation d'un tableau a permis de visualiser en temps réel l'avancement des tâches (À faire, En cours, Validé), optimisant la communication interne et garantissant le respect du calendrier très serré du projet \cite{notion_doc}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{figures/notion.png}
+	\caption{Tableau de suivi de projet collaboratif sur Notion}
+	\label{fig:notion_kanban}
+\end{figure}
+
+
+\subsection{Gestion de Configuration et Code Source : GitHub}
+L'intégralité de notre infrastructure se voulant reproductible,  Nous avons adossé notre démarche à un cycle DevOps en centralisant tous nos scripts d'installation, de configuration et d'automatisation sur un dépôt de code source distant \textbf{GitHub}, accessible via l'adresse officielle de notre projet : \url{https://github.com/Jovialngandu/datalab_infra_m1}. 
+
+Ce dépôt fait office de source unique de vérité (\textit{Single Source of Truth}) pour l'infrastructure de \textit{DataLab Research}.

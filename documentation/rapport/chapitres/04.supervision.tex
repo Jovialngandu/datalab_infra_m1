@@ -1,0 +1,42 @@
+\chapter{Supervision et Suivi de l'Infrastructure}
+\label{chap:supervision_suivi}
+
+Le maintien en condition opérationnelle d'un datacenter passe impérativement par la mise en place d'indicateurs de suivi. Ce chapitre détaille la méthodologie retenue pour surveiller l'état de santé des disques, la charge système et anticiper les pannes logiques ou matérielles au sein de l'institut \textit{DataLab Research}.
+
+\section{Approche de la Supervision Locale}
+Face aux contraintes matérielles rencontrées sur nos postes de simulation (détaillées au dernier chapitre) , l'équipe a privilégié une approche de supervision native, intégrée et hautement fiable au niveau du système d'exploitation. Plutôt que de surcharger la mémoire vive (RAM) des machines virtuelles GNS3 avec des agents graphiques lourds, le suivi repose sur l'analyse systématique des descripteurs de fichiers, des compteurs du noyau (\textit{kernel}) et de l'occupation des blocs logiques.
+
+Cette méthode offre une excellente précision et constitue la première brique fondamentale avant l'interconnexion future vers un serveur de supervision centralisé.
+
+\section{Analyse Granulaire de la Volumétrie et du Stockage}
+La surveillance du serveur de sauvegarde (\texttt{backup-vlan-60}) est l'élément le plus critique de cette architecture, car ce nœud reçoit l'intégralité des réplications des données des chercheurs via le pont réseau configuré au chapitre~\ref{chap:deploiement_services}.
+
+Le suivi en temps réel de l'espace disque est opéré au moyen de la commande système :
+\begin{verbatim}
+df -h
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/file_serveur_size.jpeg}
+    \caption{Suivi de l'occupation de l'espace disque (df -h) sur le serveur backup-vlan-60}
+    \label{fig:file_serveur_size}
+\end{figure}
+
+Comme l'atteste la capture d'écran de notre terminal présentée dans la figure précedente le système de fichiers principal est monté sur un volume logique géré par LVM (\texttt{/dev/mapper/ubuntu\string--vg-ubuntu\string--lv}).
+
+L'analyse de cette figure fournit des indicateurs précieux à l'administrateur :
+\begin{itemize}
+    \item \textbf{Taille Totale (\textit{Size}) :} Le volume alloué dispose de 14 Go d'espace brut.
+    \item \textbf{Espace Utilisé (\textit{Used}) :} 4,6 Go sont actuellement consommés par le système d'exploitation Ubuntu Server et les premières archives de test.
+    \item \textbf{Espace Disponible (\textit{Avail}) :} L'institut dispose encore de 8,1 Go d'espace utile pour stocker les fichiers scientifiques.
+    \item \textbf{Pourcentage d'utilisation (\textit{Use\%}) :} Le disque est occupé à hauteur de 37\%.
+\end{itemize}
+
+\section{Seuils d'Alerte et Politique de Capacité}
+Pour garantir la haute disponibilité de la zone de stockage, l'équipe d'administration applique une politique de gestion de capacité basée sur trois seuils critiques évalués lors des vérifications logicielles :
+\begin{enumerate}
+    \item \textbf{Seuil de Vigilance (75\% d'occupation) :} Indique que le volume de sauvegarde commence à se remplir de manière significative. Une alerte invite l'administrateur à purger les backups obsolètes ou les fichiers temporaires.
+    \item \textbf{Seuil Critique (90\% d'occupation) :} Signale un risque imminent de saturation. Le système fige les transferts non prioritaires pour protéger l'intégrité des données existantes.
+    \item \textbf{Plan d'Extension LVM :} Grâce à l'utilisation native du gestionnaire de volumes logiques LVM visible sur la figure~\ref{fig:file_serveur_size}, l'administrateur peut, en cas d'alerte, étendre à chaud et sans interruption de service l'espace disponible en ajoutant simplement un nouveau disque virtuel dans le groupe de volumes (\textit{Volume Group}).
+\end{enumerate}

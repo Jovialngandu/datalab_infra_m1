@@ -1,0 +1,99 @@
+\section{Introduction et Étude Préalable}
+
+%------------------------------------------------------------
+% Slide 3 : Contexte du Projet
+%------------------------------------------------------------
+\begin{frame}{Contexte du Projet : DataLab Research}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \textbf{L'Organisation :}
+            \begin{itemize}
+                \item Institut de recherche scientifique moderne.
+                \item \textbf{80 Utilisateurs permanents} (Chercheurs, Ingénieurs, Administrateurs).
+                \item Manipulation quotidienne de volumes massifs de données scientifiques sensibles.
+            \end{itemize}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \textbf{Exigences Fondamentales :}
+            \begin{block}{Haute Disponibilité (24/7)}
+                Les projets de recherche en cours ne peuvent souffrir d'aucune interruption de service.
+            \end{block}
+            \begin{block}{Sécurité Absolue}
+                Garantir la confidentialité et l'étanchéité des flux face aux accès non autorisés.
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 4 : Étude de l'Existant et Problématique
+%------------------------------------------------------------
+\begin{frame}{Étude de l'Existant et Problématique}
+    \begin{alertblock}{Limitation de l'Infrastructure d'Origine}
+        Absence de segmentation réseau, absence de redondance sur la couche de stockage et maintenance purement réactive (faute d'outils de monitoring).
+    \end{alertblock}
+
+    \vspace{0.3cm}
+    \textbf{La Problématique Centrale :}
+    \begin{exampleblock}{\textit{Question d'Ingénierie}}
+        Comment bâtir une infrastructure datacenter virtualisée, hautement disponible et sécurisée, capable d'isoler les flux applicatifs tout en offrant une observabilité totale et automatisée aux administrateurs ?
+    \end{exampleblock}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 5 : Démarche Méthodologique et Contraintes
+%------------------------------------------------------------
+\begin{frame}{Démarche Méthodologique et Contraintes}
+    Face à des contraintes fortes, notre équipe a adopté une démarche d'ingénierie pragmatique.
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{Contraintes Réelles}
+                \begin{itemize}
+                    \item \textbf{Temps Restreint :} Calendrier global non en notre faveur.
+                    \item \textbf{Matériel Limité :} Postes de simulation restreints en CPU/RAM.
+                \end{itemize}
+            \end{block}
+        \end{column}
+
+        \begin{column}{0.48\textwidth}
+            \begin{block}{La Solution : Approche MVP}
+                \begin{itemize}
+                    \item \textbf{Conception complète :} À l'état de l'art (8 VLANs théoriques).
+                    \item \textbf{Déploiement ciblé :} Mise en œuvre d'un MVP fonctionnel  pour démontrer la faisabilité et la valeur ajoutée.
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 6 : Gestion de Projet et Outils Collaboratifs
+%------------------------------------------------------------
+\begin{frame}{Gestion de Projet et Outils Collaboratifs}
+    Pour orchestrer le travail d'équipe sous un cycle court, deux outils piliers ont été adoptés :
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item \textbf{Suivi  (Notion) :}
+                Centralisation de la phase de conception, répartition des rôles et suivi visuel des tâches.
+                \item \textbf{Versionnage (GitHub) :}
+                Source unique de vérité pour l'ensemble des scripts de configuration réseau et système.
+            \end{itemize}
+            \vspace{0.2cm}
+            \centering
+            \tiny{\url{https://github.com/Jovialngandu/datalab_infra_m1}}
+        \end{column}
+
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \centering
+                % Intégration de votre capture réelle notion.png
+                \includegraphics[width=0.95\textwidth]{figures/notion.png}
+                \caption{Tableau  de l'équipe sur Notion}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}

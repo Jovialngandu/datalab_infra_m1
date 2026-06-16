@@ -1,0 +1,98 @@
+\section{Conception et Architecture Réseau}
+
+%------------------------------------------------------------
+% Slide 7 : Objectifs de la Conception
+%------------------------------------------------------------
+\begin{frame}{Objectifs de la Conception Réseau}
+    Pour sécuriser l'institut \textit{DataLab Research}, la conception repose sur deux piliers :
+    
+    \vspace{0.3cm}
+    \begin{block}{Segmentation par VLAN (IEEE 802.1Q)}
+        \begin{itemize}
+            \item Réduction drastique des domaines de diffusion.
+            \item Isolation logique complète des différentes catégories d'utilisateurs.
+            \item Application de politiques de filtrage strictes à la frontière des zones.
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{Cœur de Réseau Centralisé}
+        Mise en œuvre d'un routage inter-VLAN de type \textbf{Router-on-a-Stick} pour interconnecter de manière contrôlée tous les réseaux de l'institut.
+    \end{block}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 8 : Plan de Segmentation Exhaustif
+%------------------------------------------------------------
+\begin{frame}{Plan de Segmentation Exhaustif (VLANs)}
+    L'ingénierie globale cible une sectorisation stricte en \textbf{6 zones distinctes} :
+    
+    \vspace{0.2cm}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{itemize}
+                \item \textbf{VLAN 10 (DMZ) :} Zone publique tampon exposée à l'extérieur.
+                \item \textbf{VLAN 20 (Production) :} Hébergement du cœur des services applicatifs.
+                \item \textbf{VLAN 30 (Chercheurs) :} Dédié aux stations des 80 scientifiques.
+            \end{itemize}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{itemize}
+                \item \textbf{VLAN 40 (Ingénieurs) :} Segment isolé pour le développement.
+                \item \textbf{VLAN 50 (Supervision) :} Flux d'administration et métriques système.
+                \item \textbf{VLAN 60 (Backup) :} Zone ultra-sécurisée dédiée au stockage répliqué.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 9 : Plan d'Adressage IP Général
+%------------------------------------------------------------
+\begin{frame}{Plan d'Adressage IP Implémenté}
+    Utilisation du bloc d'adresses privé global \texttt{10.0.0.0/16}, découpé en sous-réseaux de classe C (\texttt{/24}).
+
+    \vspace{0.2cm}
+    \centering
+    \small
+    \begin{tabular}{llll}
+        \toprule
+        \textbf{VLAN / Zone} & \textbf{Plage Réseau} & \textbf{Masque} & \textbf{Passerelle (Gateway)} \\
+        \midrule
+        \textbf{VLAN 10} -- DMZ & \texttt{10.0.10.0/24} & \texttt{255.255.255.0} & \texttt{10.0.10.254} \\
+        \textbf{VLAN 20} -- Production & \texttt{10.0.20.0/24} & \texttt{255.255.255.0} & \texttt{10.0.20.254} \\
+        \textbf{VLAN 30} -- Chercheurs & \texttt{10.0.30.0/24} & \texttt{255.255.255.0} & \texttt{10.0.30.254} \\
+        \textbf{VLAN 60} -- Backup & \texttt{10.0.60.0/24} & \texttt{255.255.255.0} & \texttt{10.0.60.254} \\
+        \bottomrule
+    \end{tabular}
+    
+    \vspace{0.3cm}
+    \flushleft
+    \footnotesize{\textbf{Note d'ingénierie :} Ce découpage garantit jusqu'à 254 hôtes par segment et offre une excellente lisibilité lors des analyses de paquets.}
+\end{frame}
+
+%------------------------------------------------------------
+% Slide 10 : Topologie Générale de la Maquette GNS3
+%------------------------------------------------------------
+\begin{frame}{Topologie Générale sous GNS3}
+    \begin{columns}[T]
+        \begin{column}{0.4\textwidth}
+            \textbf{Description de la Maquette :}
+            \begin{itemize}
+                \item Émulation réseau complète via le simulateur \textbf{GNS3}.
+                \item Commutateur gérant le marquage et le transit des trames \textit{Trunk}.
+                \item Connexion vers le routeur cœur de réseau Cisco.
+                \item Intégration du serveur de production principal et du nœud de sauvegarde.
+            \end{itemize}
+        \end{column}
+        
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                % Intégration de ta capture d'architecture globale
+                \includegraphics[width=0.98\textwidth]{figures/archi_globale.jpeg}
+                \caption{Topologie logique et interconnexions émulées}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}

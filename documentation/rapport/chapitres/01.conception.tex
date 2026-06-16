@@ -1,0 +1,59 @@
+\chapter{Conception et Dimensionnement de l'Architecture}
+\label{chap:conception_dimensionnement}
+
+\section{Segmentation Réseau Complète (VLANs)}
+Pour répondre aux exigences de sécurité, d'isolation des flux et de performance de l'institut \textit{DataLab Research}, une segmentation stricte par VLAN (\textit{Virtual Local Area Network}) selon la norme IEEE 802.1Q a été conçue. Cette approche permet de restreindre les domaines de diffusion et d'appliquer des politiques de filtrage strictes entre les différents services et catégories d'utilisateurs.
+
+L'ingénierie réseau de la maquette intègre la totalité des zones requises pour une infrastructure d'entreprise résiliente :
+\begin{itemize}
+    \item \textbf{VLAN 10 (DMZ - Zone Démilitarisée) :} Zone tampon exposée aux accès externes (futurs serveurs frontaux, proxies).
+    \item \textbf{VLAN 20 (Zone Serveurs de Production) :} Zone hautement sécurisée accueillant le cœur des services applicatifs (FTP, DNS, DHCP).
+    \item \textbf{VLAN 30 (Réseau Chercheurs) :} Dédié aux stations de travail des 80 scientifiques de l'institut.
+    \item \textbf{VLAN 40 (Réseau d'Administration \& Équipe Ingénieurs) :}   Segment isolé  à la maintenance système et pour les postes de développement et d'ingénierie.
+    \item \textbf{VLAN 50 (Zone de Supervision) :} Zone réservée à la collecte des métriques.
+    \item \textbf{VLAN 60 (Zone de Sauvegarde / Backup) :} Segment d'infrastructure critique dédié à la réplication et à la conservation des données scientifiques.
+\end{itemize}
+
+\section{Plan d'Adressage Exhaustif}
+Le bloc d'adresses privé global retenu est le réseau \texttt{10.0.0.0/16}. Chaque VLAN se voit attribuer un sous-réseau de classe C (\texttt{/24}), garantissant une lisibilité optimale lors de l'analyse des paquets et un dimensionnement suffisant (jusqu'à 254 hôtes par segment).
+
+Le tableau~\ref{tab:plan_adressage_complet} détaille la cartographie d'adressage IP théorique et validée pour l'ensemble de l'institut.
+
+\begin{table}[htbp]
+\centering
+\caption{Plan d'adressage complet de l'infrastructure DataLab Research}
+\label{tab:plan_adressage_complet}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{VLAN} & \textbf{Nom du Réseau} & \textbf{Plage Réseau} & \textbf{Masque} & \textbf{Passerelle (Gateway)} \\ \hline
+VLAN 10       & DMZ Périmétrique       & \texttt{10.0.10.0/24}  & \texttt{255.255.255.0} & \texttt{10.0.10.254}       \\ \hline
+VLAN 20       & Serveurs Production    & \texttt{10.0.20.0/24}  & \texttt{255.255.255.0} & \texttt{10.0.20.254}       \\ \hline
+VLAN 30       & Zone Chercheurs        & \texttt{10.0.30.0/24}  & \texttt{255.255.255.0} & \texttt{10.0.30.254}       \\ \hline
+VLAN 40       & Admin \& Équipe Ingénieurs      & \texttt{10.0.40.0/24}  & \texttt{255.255.255.0} & \texttt{10.0.40.254}       \\ \hline
+VLAN 50       & Supervision   & \texttt{10.0.50.0/24}  & \texttt{255.255.255.0} & \texttt{10.0.50.254}       \\ \hline
+VLAN 60       & Stockage \& Backup     & \texttt{10.0.60.0/24}  & \texttt{255.255.255.0} & \texttt{10.0.60.254}       \\ \hline
+\end{tabular}
+\end{table}
+
+
+La figure \ref{fig:vision} illustre la vision globale de l'architecture réseau et logique de la maquette.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.85\textwidth]{figures/vision_globale.jpeg}
+	\caption{vision globale de l'architecture réseau et logique de la maquette}
+	\label{fig:vision}
+\end{figure}
+
+
+% \section{Topologie Générale de la Maquette}
+% La centralisation du routage inter-VLAN est opérée au niveau du cœur de réseau selon un modèle \textit{Router-on-a-Stick}. Le routeur principal de la maquette s'interface avec le commutateur au moyen d'un lien d'agrégation (\textit{Trunk}), où chaque sous-interface virtuelle du routeur gère l'encapsulation d'un VLAN spécifique.
+
+% La figure~\ref{fig:archi_globale} illustre la topologie globale et l'interconnexion de nos serveurs virtuels au sein du simulateur.
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{figures/archi_globale.jpeg}
+%     \caption{Topologie réseau et architecture logique sous GNS3}
+%     \label{fig:archi_globale}
+% \end{figure}
+
